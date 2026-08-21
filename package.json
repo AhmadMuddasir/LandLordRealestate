@@ -2,16 +2,32 @@
   "name": "landlord",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev:next": "next dev",
+    "dev:api": "nodemon src/api/server.js",
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:api\"",
     "lint": "eslint"
   },
   "dependencies": {
+    "axios": "^1.19.0",
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.1",
+    "concurrently": "^10.0.5",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "http-errors": "^2.0.1",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.33.0",
+    "mongoose": "^9.9.3",
+    "multer": "^2.2.0",
     "next": "16.3.1",
+    "nodemon": "^3.1.14",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-hot-toast": "^2.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
