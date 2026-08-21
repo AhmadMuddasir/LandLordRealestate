@@ -4,6 +4,7 @@ import { config } from "./config/config.js";
 import connectDB from "./config/db.js";
 import userRouter from "./user/userRouter.js";
 import propertyRouter from "./property/propertyRouter.js";
+import rentalRouter from "./rental/rentalRouter.js"
 const app = express();
 
 connectDB();
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users",userRouter);
 app.use("/api/properties",propertyRouter);
+app.use("/api/rental",rentalRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "Real Estate API Running" });
