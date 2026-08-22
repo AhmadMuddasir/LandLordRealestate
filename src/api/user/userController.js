@@ -49,7 +49,7 @@ const registerUser = async (req, res, next) => {
       },
       config.jwtSecret,
       {
-        expiresIn: "30d",
+        expiresIn: "365d",
       }
     );
 
@@ -115,7 +115,7 @@ const loginUser = async (req, res, next) => {
       },
       config.jwtSecret,
       {
-        expiresIn: "30d",
+        expiresIn: "365d",
       }
     );
 

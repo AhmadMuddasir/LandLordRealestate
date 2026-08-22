@@ -17,13 +17,7 @@ const rentalSchema = new mongoose.Schema(
     propertyType: {
       type: String,
       required: true,
-      enum: [
-        "House",
-        "Apartment",
-        "Room",
-        "Shop",
-        "Office",
-      ],
+      enum: ["House", "Apartment", "Room", "Shop", "Office"],
     },
 
     location: {
@@ -82,8 +76,7 @@ const rentalSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-export default mongoose.models.Rental ||
-  mongoose.model("Rental", rentalSchema);
+export default mongoose.models.Rental || mongoose.model("Rental", rentalSchema);

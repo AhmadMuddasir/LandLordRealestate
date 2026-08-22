@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users",userRouter);
 app.use("/api/properties",propertyRouter);
-app.use("/api/rental",rentalRouter);
+app.use("/api/rentals",rentalRouter);
 
 app.get("/", (req, res) => {
   res.json({ message: "Real Estate API Running" });
