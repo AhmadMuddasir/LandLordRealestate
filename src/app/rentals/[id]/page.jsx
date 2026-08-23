@@ -161,7 +161,8 @@ const page = () => {
                     <p className="text-xs text-gray-500">Rent</p>
 
                     <p className="mt-1 font-semibold text-black">
-                      ₹{Number(rentals.monthlyRent).toLocaleString("en-IN")}/ month
+                      ₹{Number(rentals.monthlyRent).toLocaleString("en-IN")}/
+                      month
                     </p>
                   </div>
 
@@ -193,26 +194,18 @@ const page = () => {
 
                   <div className="mt-4">
                     <p className="font-semibold text-black">
-                      {rentals.Ownername}
+                      {rentals.ownerName}
                     </p>
 
-                    <p className="mt-1 text-sm text-gray-500">
-                      {rentals.contactNumber}
+                      Whatsapp: {rentals.contactNumber}
+                    <p className="mt-1 text-xl font-bold ">
                     </p>
                   </div>
                 </div>
 
                 {/* Actions */}
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  {/* Contact */}
-                  {rentals.contactNumber && (
-                    <a
-                      href={`tel:${rentals.contactNumber}`}
-                      className="flex flex-1 items-center justify-center rounded-xl bg-cyan-500 px-5 py-3.5 font-semibold text-white transition hover:bg-cyan-600"
-                    >
-                      📞 Contact Owner
-                    </a>
-                  )}
+  
 
                   {/* Delete - only owner */}
                   {user &&

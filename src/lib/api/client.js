@@ -11,7 +11,6 @@ export const apiClient = axios.create({
   },
 });
 
-
 apiClient.interceptors.request.use(
   (config) => {
     if (typeof window !== "undefined") {
@@ -22,11 +21,15 @@ apiClient.interceptors.request.use(
       }
     }
 
+    // Let axios set the correct multipart boundary itself
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    }
+
     return config;
   },
   (error) => Promise.reject(error)
 );
-
 
 apiClient.interceptors.response.use(
   (response) => response,

@@ -14,53 +14,22 @@ import authentication from "../middlewares/authentication.js";
 
 const router = express.Router();
 
-
-
 // Create property
-router.post(
-  "/",
-  authentication,
-  upload.array("images", 6),
-  createProperty
-);
-
+router.post("/", authentication, upload.array("images", 6), createProperty);
 
 // Get all properties
-router.get(
-  "/",
-  getAllProperties
-);
-
+router.get("/", getAllProperties);
 
 // Search properties by location
-router.get(
-  "/search",
-  searchProperties
-);
-
+router.get("/search", searchProperties);
 
 // Get single property
-router.get(
-  "/:id",
-  getProperty
-);
-
+router.get("/:id", getProperty);
 
 // Update property
-router.put(
-  "/:id",
-  authentication,
-  upload.array("images", 6),
-  updateProperty
-);
-
+router.put("/:id", authentication, upload.array("images", 6), updateProperty);
 
 // Delete property
-router.delete(
-  "/:id",
-  authentication,
-  deleteProperty
-);
-
+router.delete("/:id", authentication, deleteProperty);
 
 export default router;

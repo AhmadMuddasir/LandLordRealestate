@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Search, User, PlusCircle, LogOut } from "lucide-react";
+import { Menu, X, Search, User, PlusCircle,Building2,LogOut } from "lucide-react";
 
 import { useAuth } from "@/context/AuthContext";
 
@@ -26,12 +26,12 @@ const Navbar = () => {
           onClick={() => setMenuOpen(false)}
         >
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-500 text-lg font-bold text-white">
-            R
+             <Building2/>
           </div>
 
-          <span className="text-xl font-bold tracking-tight text-black">
+          {/* <span className="text-xl font-bold tracking-tight text-black">
             Real<span className="text-cyan-500">Estate</span>
-          </span>
+          </span> */}
         </Link>
 
         {/* Desktop Navigation */}

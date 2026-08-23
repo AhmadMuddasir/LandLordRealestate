@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { user,login } = useAuth();
+  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -50,6 +51,12 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+useEffect(() => {
+  if (user) {
+    router.replace("/");
+  }
+}, [user, router]);
 
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white px-4 py-10 sm:px-6">

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const propertySchema = new mongoose.Schema(
   {
-    Ownername: {
+    ownerName: {
       type: String,
       required: true,
       trim: true,
@@ -71,7 +71,7 @@ const propertySchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export default mongoose.models.Property ||

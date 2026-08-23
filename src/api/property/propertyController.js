@@ -4,12 +4,9 @@ import mongoose from "mongoose";
 
 import propertyModel from "./propertyModel.js";
 
-import {
-  uploadAndCompressImage,
-} from "../config/cloudinary.js";
+import { uploadAndCompressImage } from "../config/cloudinary.js";
 
 import cloudinary from "../config/cloudinary.js";
-
 
 // =====================================================
 // Delete temporary Multer files
@@ -22,14 +19,10 @@ const deleteTempFiles = (files = []) => {
         fs.unlinkSync(file.path);
       }
     } catch (error) {
-      console.error(
-        "Error deleting temporary file:",
-        error
-      );
+      console.error("Error deleting temporary file:", error);
     }
   }
 };
-
 
 // =====================================================
 // CREATE PROPERTY
@@ -41,7 +34,7 @@ const createProperty = async (req, res, next) => {
 
   try {
     const {
-      Ownername,
+      ownerName,
       contactNumber,
       propertyType,
       location,
@@ -52,7 +45,7 @@ const createProperty = async (req, res, next) => {
 
     // Validate fields
     if (
-      !Ownername ||
+      !ownerName ||
       !contactNumber ||
       !propertyType ||
       !location ||
@@ -62,52 +55,36 @@ const createProperty = async (req, res, next) => {
     ) {
       deleteTempFiles(files);
 
-      return next(
-        createHttpError(400, "All fields are required")
-      );
+      return next(createHttpError(400, "All fields are required"));
     }
 
     // Validate images
     if (files.length === 0) {
-      return next(
-        createHttpError(
-          400,
-          "At least one image is required"
-        )
-      );
+      return next(createHttpError(400, "At least one image is required"));
     }
 
     if (files.length > 6) {
       deleteTempFiles(files);
 
-      return next(
-        createHttpError(
-          400,
-          "Maximum 6 images are allowed"
-        )
-      );
+      return next(createHttpError(400, "Maximum 6 images are allowed"));
     }
-
 
     // ================================================
     // Upload images to Cloudinary
     // ================================================
 
     for (const file of files) {
-      const image = await uploadAndCompressImage(
-        file.path
-      );
+      const image = await uploadAndCompressImage(file.path);
 
       uploadedImages.push(image);
     }
-
 
     // ================================================
     // Save property in MongoDB
     // ================================================
 
     const property = await propertyModel.create({
-      Ownername: Ownername.trim(),
+      ownerName: ownerName.trim(),
       contactNumber: contactNumber.trim(),
       propertyType,
       location: location.trim(),
@@ -120,52 +97,31 @@ const createProperty = async (req, res, next) => {
       creator_id: req.userId,
     });
 
-
     // Delete temporary files
     deleteTempFiles(files);
-
 
     return res.status(201).json({
       message: "Property created successfully",
       property,
     });
-
   } catch (error) {
-
-    console.error(
-      "Create property error:",
-      error
-    );
-
+    console.error("Create property error:", error);
 
     // Delete images already uploaded to Cloudinary
     for (const image of uploadedImages) {
       try {
-        await cloudinary.uploader.destroy(
-          image.public_id
-        );
+        await cloudinary.uploader.destroy(image.public_id);
       } catch (deleteError) {
-        console.error(
-          "Failed to delete uploaded image:",
-          deleteError
-        );
+        console.error("Failed to delete uploaded image:", deleteError);
       }
     }
-
 
     // Delete temporary files
     deleteTempFiles(files);
 
-
-    return next(
-      createHttpError(
-        500,
-        "Error while creating property"
-      )
-    );
+    return next(createHttpError(500, "Error while creating property"));
   }
 };
-
 
 // =====================================================
 // GET ALL PROPERTIES
@@ -173,32 +129,18 @@ const createProperty = async (req, res, next) => {
 
 const getAllProperties = async (req, res, next) => {
   try {
-
-    const properties = await propertyModel
-      .find()
-      .sort({ createdAt: -1 });
+    const properties = await propertyModel.find().sort({ createdAt: -1 });
 
     return res.status(200).json({
       count: properties.length,
       properties,
     });
-
   } catch (error) {
+    console.error("Get properties error:", error);
 
-    console.error(
-      "Get properties error:",
-      error
-    );
-
-    return next(
-      createHttpError(
-        500,
-        "Error while fetching properties"
-      )
-    );
+    return next(createHttpError(500, "Error while fetching properties"));
   }
 };
-
 
 // =====================================================
 // GET SINGLE PROPERTY
@@ -206,50 +148,27 @@ const getAllProperties = async (req, res, next) => {
 
 const getProperty = async (req, res, next) => {
   try {
-
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(
-        createHttpError(
-          400,
-          "Invalid property ID"
-        )
-      );
+      return next(createHttpError(400, "Invalid property ID"));
     }
 
-    const property =
-      await propertyModel.findById(id);
+    const property = await propertyModel.findById(id);
 
     if (!property) {
-      return next(
-        createHttpError(
-          404,
-          "Property not found"
-        )
-      );
+      return next(createHttpError(404, "Property not found"));
     }
 
     return res.status(200).json({
       property,
     });
-
   } catch (error) {
+    console.error("Get property error:", error);
 
-    console.error(
-      "Get property error:",
-      error
-    );
-
-    return next(
-      createHttpError(
-        500,
-        "Error while fetching property"
-      )
-    );
+    return next(createHttpError(500, "Error while fetching property"));
   }
 };
-
 
 // =====================================================
 // SEARCH BY LOCATION
@@ -257,47 +176,29 @@ const getProperty = async (req, res, next) => {
 
 const searchProperties = async (req, res, next) => {
   try {
-
     const { location } = req.query;
 
     if (!location || !location.trim()) {
-      return next(
-        createHttpError(
-          400,
-          "Location search is required"
-        )
-      );
+      return next(createHttpError(400, "Location search is required"));
     }
 
-    const properties =
-      await propertyModel.find({
-        location: {
-          $regex: location.trim(),
-          $options: "i",
-        },
-      });
+    const properties = await propertyModel.find({
+      location: {
+        $regex: location.trim(),
+        $options: "i",
+      },
+    });
 
     return res.status(200).json({
       count: properties.length,
       properties,
     });
-
   } catch (error) {
+    console.error("Search property error:", error);
 
-    console.error(
-      "Search property error:",
-      error
-    );
-
-    return next(
-      createHttpError(
-        500,
-        "Error while searching properties"
-      )
-    );
+    return next(createHttpError(500, "Error while searching properties"));
   }
 };
-
 
 // =====================================================
 // UPDATE PROPERTY
@@ -308,58 +209,37 @@ const updateProperty = async (req, res, next) => {
   const uploadedImages = [];
 
   try {
-
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
       deleteTempFiles(files);
 
-      return next(
-        createHttpError(
-          400,
-          "Invalid property ID"
-        )
-      );
+      return next(createHttpError(400, "Invalid property ID"));
     }
 
-
-    const property =
-      await propertyModel.findById(id);
+    const property = await propertyModel.findById(id);
 
     if (!property) {
       deleteTempFiles(files);
 
-      return next(
-        createHttpError(
-          404,
-          "Property not found"
-        )
-      );
+      return next(createHttpError(404, "Property not found"));
     }
 
-
     // Check ownership
-    if (
-      property.creator_id.toString() !==
-      req.userId.toString()
-    ) {
+    if (property.creator_id.toString() !== req.userId.toString()) {
       deleteTempFiles(files);
 
       return next(
-        createHttpError(
-          403,
-          "You are not allowed to update this property"
-        )
+        createHttpError(403, "You are not allowed to update this property"),
       );
     }
-
 
     // ================================================
     // Update text fields
     // ================================================
 
     const {
-      Ownername,
+      ownerName,
       contactNumber,
       propertyType,
       location,
@@ -369,142 +249,82 @@ const updateProperty = async (req, res, next) => {
       status,
     } = req.body;
 
-
-    if (Ownername !== undefined)
-      property.Ownername = Ownername.trim();
+    if (ownerName !== undefined) property.ownerName = ownerName.trim();
 
     if (contactNumber !== undefined)
-      property.contactNumber =
-        contactNumber.trim();
+      property.contactNumber = contactNumber.trim();
 
-    if (propertyType !== undefined)
-      property.propertyType = propertyType;
+    if (propertyType !== undefined) property.propertyType = propertyType;
 
-    if (location !== undefined)
-      property.location = location.trim();
+    if (location !== undefined) property.location = location.trim();
 
-    if (price !== undefined)
-      property.price = Number(price);
+    if (price !== undefined) property.price = Number(price);
 
-    if (areaSize !== undefined)
-      property.areaSize = areaSize.trim();
+    if (areaSize !== undefined) property.areaSize = areaSize.trim();
 
-    if (description !== undefined)
-      property.description =
-        description.trim();
+    if (description !== undefined) property.description = description.trim();
 
-    if (status !== undefined)
-      property.status = status;
-
+    if (status !== undefined) property.status = status;
 
     // ================================================
     // If new images are provided
     // ================================================
 
     if (files.length > 0) {
-
       if (files.length > 6) {
         deleteTempFiles(files);
 
-        return next(
-          createHttpError(
-            400,
-            "Maximum 6 images are allowed"
-          )
-        );
+        return next(createHttpError(400, "Maximum 6 images are allowed"));
       }
-
 
       // Upload NEW images first
       for (const file of files) {
-
-        const image =
-          await uploadAndCompressImage(
-            file.path
-          );
+        const image = await uploadAndCompressImage(file.path);
 
         uploadedImages.push(image);
       }
 
-
       // Delete OLD images from Cloudinary
       for (const oldImage of property.images) {
-
         if (oldImage.public_id) {
-
           try {
-
-            await cloudinary.uploader.destroy(
-              oldImage.public_id
-            );
-
+            await cloudinary.uploader.destroy(oldImage.public_id);
           } catch (error) {
-
-            console.error(
-              "Failed to delete old Cloudinary image:",
-              error
-            );
+            console.error("Failed to delete old Cloudinary image:", error);
           }
         }
       }
-
 
       // Replace old images
       property.images = uploadedImages;
     }
 
-
     await property.save();
-
 
     // Delete temporary files
     deleteTempFiles(files);
-
 
     return res.status(200).json({
       message: "Property updated successfully",
       property,
     });
-
   } catch (error) {
-
-    console.error(
-      "Update property error:",
-      error
-    );
-
+    console.error("Update property error:", error);
 
     // Delete newly uploaded Cloudinary images
     for (const image of uploadedImages) {
-
       try {
-
-        await cloudinary.uploader.destroy(
-          image.public_id
-        );
-
+        await cloudinary.uploader.destroy(image.public_id);
       } catch (deleteError) {
-
-        console.error(
-          "Failed to delete uploaded image:",
-          deleteError
-        );
+        console.error("Failed to delete uploaded image:", deleteError);
       }
     }
 
-
     deleteTempFiles(files);
 
-
-    return next(
-      createHttpError(
-        500,
-        "Error while updating property"
-      )
-    );
+    return next(createHttpError(500, "Error while updating property"));
   }
 };
-
 
 // =====================================================
 // DELETE PROPERTY
@@ -512,93 +332,48 @@ const updateProperty = async (req, res, next) => {
 
 const deleteProperty = async (req, res, next) => {
   try {
-
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return next(
-        createHttpError(
-          400,
-          "Invalid property ID"
-        )
-      );
+      return next(createHttpError(400, "Invalid property ID"));
     }
 
-
-    const property =
-      await propertyModel.findById(id);
+    const property = await propertyModel.findById(id);
 
     if (!property) {
-      return next(
-        createHttpError(
-          404,
-          "Property not found"
-        )
-      );
+      return next(createHttpError(404, "Property not found"));
     }
-
 
     // Check ownership
-    if (
-      property.creator_id.toString() !==
-      req.userId.toString()
-    ) {
+    if (property.creator_id.toString() !== req.userId.toString()) {
       return next(
-        createHttpError(
-          403,
-          "You are not allowed to delete this property"
-        )
+        createHttpError(403, "You are not allowed to delete this property"),
       );
     }
-
 
     // Delete Cloudinary images
     for (const image of property.images) {
-
       if (image.public_id) {
-
         try {
-
-          await cloudinary.uploader.destroy(
-            image.public_id
-          );
-
+          await cloudinary.uploader.destroy(image.public_id);
         } catch (error) {
-
-          console.error(
-            "Failed to delete Cloudinary image:",
-            error
-          );
+          console.error("Failed to delete Cloudinary image:", error);
         }
       }
     }
 
-
     // Delete MongoDB property
     await propertyModel.findByIdAndDelete(id);
 
-
     return res.status(200).json({
-      message:
-        "Property and images deleted successfully",
+      message: "Property and images deleted successfully",
     });
-
   } catch (error) {
+    console.error("Delete property error:", error);
 
-    console.error(
-      "Delete property error:",
-      error
-    );
-
-    return next(
-      createHttpError(
-        500,
-        "Error while deleting property"
-      )
-    );
+    return next(createHttpError(500, "Error while deleting property"));
   }
 };
-
 
 // =====================================================
 // EXPORT
