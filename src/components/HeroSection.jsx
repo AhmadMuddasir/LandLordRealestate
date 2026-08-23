@@ -11,7 +11,7 @@ const SLIDES = [
     title: "Add & List Your Property Easily",
     description: "Reach thousands of verified buyers and tenants. Post your land, commercial store, or plot in minutes.",
     ctaText: "List Your Property",
-    ctaLink: "/add",
+    ctaLink: "/add-listings",
     icon: PlusCircle,
     image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1920&auto=format&fit=crop",
     showSearch: false,
@@ -55,7 +55,7 @@ const HeroSection = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
-    }, 3000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [nextSlide]);
 

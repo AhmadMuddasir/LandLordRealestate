@@ -185,7 +185,7 @@ const Navbar = () => {
               </Link>
 
               <Link
-                href="/upload"
+                href="/my-listings"
                 onClick={() => setMenuOpen(false)}
                 className="rounded-lg px-3 py-3 font-medium text-gray-700 hover:bg-cyan-50 hover:text-cyan-600"
               >

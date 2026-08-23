@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Building2 } from "lucide-react";
 const LoginPage = () => {
   const { user,login } = useAuth();
   const router = useRouter();
@@ -65,7 +66,7 @@ useEffect(() => {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500 text-xl font-bold text-white shadow-sm">
-            R
+            <Building2></Building2>
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-black">

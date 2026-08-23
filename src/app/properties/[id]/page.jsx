@@ -174,15 +174,12 @@ const page = () => {
 
                 {/* Owner */}
                 <div className="mt-8 rounded-xl border border-gray-200 p-5">
-                  <h2 className="text-lg font-bold text-black">
-                    Property Owner
-                  </h2>
 
                   <div className="mt-4">
                     <p className="font-semibold text-black">
-                      {properties.ownername}
+                      Property Owner : {properties.ownerName}
                     </p>
-                    <p className="flex flex-row mt-1 text-md font-bold text-green-500">
+                    <p className="mt-3 text-xl font-bold ">
                       Whatsapp: {properties.contactNumber} 
                     
                     </p>

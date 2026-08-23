@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 import { User, Mail, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 const RegisterPage = () => {
   const { register } = useAuth();
@@ -73,7 +74,7 @@ const RegisterPage = () => {
         {/* Heading */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500 text-xl font-bold text-white shadow-sm">
-            R
+            <Building2></Building2>
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-black">
