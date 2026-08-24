@@ -2,40 +2,54 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Search, PlusCircle, Home, MapPin, ArrowRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  PlusCircle,
+  Home,
+  MapPin,
+  ArrowRight,
+} from "lucide-react";
 
 const SLIDES = [
   {
     id: 1,
     badge: "For Landlords & Owners",
     title: "Add & List Your Property Easily",
-    description: "Reach thousands of verified buyers and tenants. Post your land, commercial store, or plot in minutes.",
+    description:
+      "Reach thousands of verified buyers and tenants. Post your land, commercial store, or plot in minutes.",
     ctaText: "List Your Property",
     ctaLink: "/add-listings",
     icon: PlusCircle,
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1920&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1920&auto=format&fit=crop",
     showSearch: false,
   },
   {
     id: 2,
     badge: "For Tenants & Renters",
     title: "Find Your Ideal Rental Space",
-    description: "Explore houses, commercial shops, and apartments for rent directly from owners without middleman hassle.",
+    description:
+      "Explore houses, commercial shops, and apartments for rent directly from owners without middleman hassle.",
     ctaText: "Browse Rentals",
     ctaLink: "/rentals",
     icon: Home,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1920&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1920&auto=format&fit=crop",
     showSearch: false,
   },
   {
     id: 3,
     badge: "Buy & Invest",
     title: "Search & Buy Properties or Rentals",
-    description: "Discover top-rated lands, commercial stores, and plots across your favorite prime locations.",
+    description:
+      "Discover top-rated lands, commercial stores, and plots across your favorite prime locations.",
     ctaText: "Explore Properties",
     ctaLink: "/properties",
     icon: MapPin,
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1920&auto=format&fit=crop",
     showSearch: true,
   },
 ];
