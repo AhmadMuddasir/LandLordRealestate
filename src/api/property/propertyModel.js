@@ -74,5 +74,13 @@ const propertySchema = new mongoose.Schema(
   },
 );
 
+propertySchema.index({
+  createdAt: -1,
+});
+
+propertySchema.index({
+  location: 1,
+});
+
 export default mongoose.models.Property ||
   mongoose.model("Property", propertySchema);

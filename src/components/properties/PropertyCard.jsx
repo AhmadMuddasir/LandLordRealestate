@@ -8,10 +8,14 @@ import {
   ArrowRight,
   Tag,
 } from "lucide-react";
+import { getOptimizedCloudinaryUrl } from "@/lib/utils/cloudinary";
 
 const PropertyCard = ({ property }) => {
-const image = property.images?.[0]?.url || property.images?.[0] || "/placeholder-property.jpg";
-console.log("images",image)
+const image = getOptimizedCloudinaryUrl(
+  property.images?.[0]?.url ||
+    property.images?.[0],
+  800
+);
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">

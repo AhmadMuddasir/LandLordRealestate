@@ -45,7 +45,8 @@ export function AuthProvider({ children }) {
 
       return data;
     } catch (error) {
-      toast.error("Login failed");
+    const errorMessage = error.response?.data?.message || error.message || "Login failed";
+    toast.error(errorMessage);
       console.log(error);
     }
   };
@@ -63,7 +64,8 @@ export function AuthProvider({ children }) {
       router.push("/");
       return data;
     } catch (error) {
-      toast.error("signUp failed");
+    const errorMessage = error.response?.data?.message || error.message || "sign up failed";
+    toast.error(errorMessage);
       console.log(error);
     }
   };

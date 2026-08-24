@@ -1,6 +1,6 @@
 "use client";
 
-import PropertiesSection from "./PropertiesSection";
+import PropertiesSection from "@/components/properties/PropertiesSection";
 
 const PropertiesPage = () => {
   return (

@@ -1,11 +1,16 @@
 import { apiClient } from "./client";
 
 export const rentalApi = {
-  getAll: async () => {
-    const { data } = await apiClient.get("/rentals");
+getAll: async (params = {}) => {
+  const { data } = await apiClient.get(
+    "/rentals",
+    {
+      params,
+    }
+  );
 
-    return data;
-  },
+  return data;
+},
 
   getById: async (id) => {
     const { data } = await apiClient.get(`/rentals/${id}`);

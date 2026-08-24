@@ -7,10 +7,13 @@ import {
   ArrowRight,
   Tag,
 } from "lucide-react";
+import { getOptimizedCloudinaryUrl } from "@/lib/utils/cloudinary";
 
 const RentalCard = ({ rental }) => {
-  const image =
-    rental.images?.[0].url || "/placeholder-rental.jpg";
+ const image = getOptimizedCloudinaryUrl(
+  rental.images?.[0]?.url,
+  800
+);
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">

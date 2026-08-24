@@ -1,6 +1,6 @@
 "use client";
 
-import RentalsSection from "./RentalsSection";
+import RentalsSection from "@/components/rentals/RentalsSection";
 
 const RentalsPage = () => {
   return (

@@ -79,4 +79,12 @@ const rentalSchema = new mongoose.Schema(
   },
 );
 
+rentalSchema.index({
+  createdAt: -1,
+});
+
+rentalSchema.index({
+  location: 1,
+});
+
 export default mongoose.models.Rental || mongoose.model("Rental", rentalSchema);

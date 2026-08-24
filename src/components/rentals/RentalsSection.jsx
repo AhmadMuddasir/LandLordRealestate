@@ -2,47 +2,49 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { propertyApi } from "@/lib/api/property";
-import PropertyCard from "@/components/properties/PropertyCard";
+import { rentalApi } from "@/lib/api/rental";
+import RentalCard from "./RentalCard";
 import toast from "react-hot-toast";
-import { Loader2, Search, Building2, ArrowRight } from "lucide-react";
+import { Loader2, Search, House, ArrowRight } from "lucide-react";
 
-const PropertiesSection = ({
+const RentalsSection = ({
   limit = null,
   showSearch = true,
   showViewAll = false,
 }) => {
-  const [properties, setProperties] = useState([]);
+  const [rentals, setRentals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    loadProperties();
+    loadRentals();
   }, []);
 
-  const loadProperties = async () => {
+  const loadRentals = async () => {
     try {
       setLoading(true);
 
-      const data = await propertyApi.getAll();
-      const list = Array.isArray(data) ? data : data?.properties ?? [];
+      const data = await rentalApi.getAll({
+        limit: limit || 24,
+      });
+      const list = Array.isArray(data) ? data : (data?.rentals ?? []);
 
-      setProperties(list);
+      setRentals(list);
     } catch (error) {
-      console.error("Failed to load properties:", error);
-      toast.error(error.response?.data?.message || "Failed to load properties");
+      console.error("Failed to load rentals:", error);
+      toast.error(error.response?.data?.message || "Failed to load rentals");
     } finally {
       setLoading(false);
     }
   };
 
-  const filteredProperties = properties.filter((property) =>
-    property.location?.toLowerCase().includes(search.toLowerCase())
+  const filteredRentals = rentals.filter((rental) =>
+    rental.location?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const displayedProperties = limit
-    ? filteredProperties.slice(0, limit)
-    : filteredProperties;
+  const displayedRentals = limit
+    ? filteredRentals.slice(0, limit)
+    : filteredRentals;
 
   return (
     <>
@@ -56,17 +58,17 @@ const PropertiesSection = ({
               </p>
 
               <h1 className="text-3xl font-bold tracking-tight text-black sm:text-4xl">
-                Properties
+                Rentals
               </h1>
 
               <p className="mt-2 max-w-xl text-sm text-gray-500 sm:text-base">
-                Explore properties available for sale in different locations.
+                Explore rental properties available in different locations.
               </p>
             </div>
 
             {showViewAll && (
               <Link
-                href="/properties"
+                href="/rentals"
                 className="flex shrink-0 items-center gap-1 text-sm font-semibold text-cyan-600 transition hover:text-cyan-700"
               >
                 View all <ArrowRight size={16} />
@@ -94,15 +96,14 @@ const PropertiesSection = ({
         </div>
       </section>
 
-      {/* Properties */}
+      {/* Rentals */}
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Result count */}
         {!loading && showSearch && (
           <div className="mb-6 flex items-center justify-between">
             <p className="text-sm text-gray-500">
-              {filteredProperties.length}{" "}
-              {filteredProperties.length === 1 ? "property" : "properties"}{" "}
-              found
+              {filteredRentals.length}{" "}
+              {filteredRentals.length === 1 ? "rental" : "rentals"} found
             </p>
           </div>
         )}
@@ -112,18 +113,18 @@ const PropertiesSection = ({
           <div className="flex min-h-[300px] items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-gray-500">
               <Loader2 size={32} className="animate-spin text-cyan-500" />
-              <p className="text-sm">Loading properties...</p>
+              <p className="text-sm">Loading rentals...</p>
             </div>
           </div>
-        ) : displayedProperties.length === 0 ? (
+        ) : displayedRentals.length === 0 ? (
           /* Empty state */
           <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-5 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cyan-50 text-cyan-500">
-              <Building2 size={26} />
+              <House size={26} />
             </div>
 
             <h2 className="text-lg font-semibold text-black">
-              No properties found
+              No rentals found
             </h2>
 
             <p className="mt-1 max-w-md text-sm text-gray-500">
@@ -131,13 +132,10 @@ const PropertiesSection = ({
             </p>
           </div>
         ) : (
-          /* Property grid */
+          /* Rental grid */
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {displayedProperties.map((property) => (
-              <PropertyCard
-                key={property._id || property.id}
-                property={property}
-              />
+            {displayedRentals.map((rental) => (
+              <RentalCard key={rental._id || rental.id} rental={rental} />
             ))}
           </div>
         )}
@@ -146,4 +144,4 @@ const PropertiesSection = ({
   );
 };
 
-export default PropertiesSection;
+export default RentalsSection;

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { propertyApi } from "@/lib/api/property";
 import { rentalApi } from "@/lib/api/rental";
+import imageCompression from "browser-image-compression";
 import toast from "react-hot-toast";
 import {
   Building2,
@@ -23,7 +24,7 @@ import {
 const PROPERTY_TYPES = ["Land", "Plot", "Commercial Store"];
 const RENTAL_TYPES = ["House", "Apartment", "Room", "Shop", "Office"];
 
-const MAX_IMAGES = 6;
+const MAX_IMAGES = 5;
 
 const AddListingPage = () => {
   const router = useRouter();
@@ -47,12 +48,14 @@ const AddListingPage = () => {
   const [previews, setPreviews] = useState([]); // object URLs
 
   // Redirect if not logged in
-useEffect(() => {
-  if (user === null) {
-    toast.error("Please log in to add a listing", { id: "auth-required" });
-    router.push("/login");
-  }
-}, [user, router]);
+  useEffect(() => {
+    if (user === null) {
+      toast.error("Please log in if already logged in then upload", {
+        id: "auth-required",
+      });
+      
+    }
+  }, [user, router]);
 
   // Reset propertyType when switching listing type (different enums)
   useEffect(() => {
@@ -74,34 +77,87 @@ useEffect(() => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFilesSelected = (fileList) => {
-    const newFiles = Array.from(fileList);
+const handleFilesSelected = async (fileList) => {
+  const newFiles = Array.from(fileList);
 
-    if (images.length + newFiles.length > MAX_IMAGES) {
-      toast.error(`Maximum ${MAX_IMAGES} images allowed`);
-      return;
+  if (images.length + newFiles.length > MAX_IMAGES) {
+    toast.error(`Maximum ${MAX_IMAGES} images allowed`);
+    return;
+  }
+
+  const validFiles = newFiles.filter((file) => {
+    if (!file.type.startsWith("image/")) {
+      toast.error(`${file.name} is not an image`);
+      return false;
     }
 
-    const validFiles = newFiles.filter((file) => {
-      if (!file.type.startsWith("image/")) {
-        toast.error(`${file.name} is not an image`);
-        return false;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(`${file.name} exceeds 5MB`);
-        return false;
-      }
-      return true;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(`${file.name} exceeds 5MB`);
+      return false;
+    }
+
+    return true;
+  });
+
+  if (validFiles.length === 0) return;
+
+  try {
+    toast.loading("Optimizing images...", {
+      id: "image-compression",
     });
 
-    if (validFiles.length === 0) return;
+    const compressedFiles = await Promise.all(
+      validFiles.map(async (file) => {
+        const options = {
+          maxSizeMB: 1.5,
+          maxWidthOrHeight: 2000,
+          useWebWorker: true,
+          initialQuality: 0.85,
+        };
 
-    setImages((prev) => [...prev, ...validFiles]);
+        const compressedFile = await imageCompression(
+          file,
+          options
+        );
+
+        return new File(
+          [compressedFile],
+          file.name,
+          {
+            type: compressedFile.type,
+            lastModified: Date.now(),
+          }
+        );
+      })
+    );
+
+    toast.dismiss("image-compression");
+
+    setImages((prev) => [
+      ...prev,
+      ...compressedFiles,
+    ]);
+
     setPreviews((prev) => [
       ...prev,
-      ...validFiles.map((file) => URL.createObjectURL(file)),
+      ...compressedFiles.map((file) =>
+        URL.createObjectURL(file)
+      ),
     ]);
-  };
+
+  } catch (error) {
+    toast.dismiss("image-compression");
+
+    console.error(
+      "Image compression error:",
+      error
+    );
+
+    toast.error(
+      "Failed to optimize images"
+    );
+  }
+};
 
   const handleFileInputChange = (e) => {
     if (e.target.files?.length) {
@@ -396,7 +452,7 @@ useEffect(() => {
             <label className="mb-1.5 block text-sm font-medium text-black">
               Images{" "}
               <span className="font-normal text-gray-400">
-                (up to {MAX_IMAGES}, max 5MB each)
+                (up to {MAX_IMAGES}, max 5MB each )
               </span>
             </label>
 
@@ -463,7 +519,7 @@ useEffect(() => {
             {submitting ? (
               <>
                 <Loader2 size={18} className="animate-spin" />
-                Submitting...
+                Submitting...may take 10-15 seconds
               </>
             ) : (
               `List ${listingType === "property" ? "Property" : "Rental"}`

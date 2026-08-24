@@ -8,9 +8,7 @@ import { uploadAndCompressImage } from "../config/cloudinary.js";
 
 import cloudinary from "../config/cloudinary.js";
 
-// =====================================================
-// Delete temporary Multer files
-// =====================================================
+
 
 const deleteTempFiles = (files = []) => {
   for (const file of files) {
@@ -24,9 +22,7 @@ const deleteTempFiles = (files = []) => {
   }
 };
 
-// =====================================================
-// CREATE PROPERTY
-// =====================================================
+
 
 const createProperty = async (req, res, next) => {
   const files = req.files || [];
@@ -63,25 +59,23 @@ const createProperty = async (req, res, next) => {
       return next(createHttpError(400, "At least one image is required"));
     }
 
-    if (files.length > 6) {
+    if (files.length > 5) {
       deleteTempFiles(files);
 
       return next(createHttpError(400, "Maximum 6 images are allowed"));
     }
 
-    // ================================================
-    // Upload images to Cloudinary
-    // ================================================
+ 
 
-    for (const file of files) {
-      const image = await uploadAndCompressImage(file.path);
+    const uploadedResults = await Promise.all(
+      files.map((file) =>
+        uploadAndCompressImage(file.path, "realestate/properties"),
+      ),
+    );
 
-      uploadedImages.push(image);
-    }
+    uploadedImages.push(...uploadedResults);
 
-    // ================================================
-    // Save property in MongoDB
-    // ================================================
+
 
     const property = await propertyModel.create({
       ownerName: ownerName.trim(),
@@ -123,22 +117,48 @@ const createProperty = async (req, res, next) => {
   }
 };
 
-// =====================================================
-// GET ALL PROPERTIES
-// =====================================================
+
 
 const getAllProperties = async (req, res, next) => {
   try {
-    const properties = await propertyModel.find().sort({ createdAt: -1 });
+    const limit = Math.min(
+      Number(req.query.limit) || 24,
+      50
+    );
+
+    const page = Math.max(
+      Number(req.query.page) || 1,
+      1
+    );
+
+    const skip = (page - 1) * limit;
+
+    const properties = await propertyModel
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
 
     return res.status(200).json({
       count: properties.length,
       properties,
+      page,
+      limit,
     });
-  } catch (error) {
-    console.error("Get properties error:", error);
 
-    return next(createHttpError(500, "Error while fetching properties"));
+  } catch (error) {
+    console.error(
+      "Get properties error:",
+      error
+    );
+
+    return next(
+      createHttpError(
+        500,
+        "Error while fetching properties"
+      )
+    );
   }
 };
 
@@ -266,23 +286,26 @@ const updateProperty = async (req, res, next) => {
 
     if (status !== undefined) property.status = status;
 
-    // ================================================
-    // If new images are provided
-    // ================================================
+
 
     if (files.length > 0) {
-      if (files.length > 6) {
+      if (files.length > 5) {
         deleteTempFiles(files);
 
         return next(createHttpError(400, "Maximum 6 images are allowed"));
       }
 
       // Upload NEW images first
-      for (const file of files) {
-        const image = await uploadAndCompressImage(file.path);
+const uploadedResults = await Promise.all(
+  files.map((file) =>
+    uploadAndCompressImage(
+      file.path,
+      "realestate/properties"
+    )
+  )
+);
 
-        uploadedImages.push(image);
-      }
+uploadedImages.push(...uploadedResults);
 
       // Delete OLD images from Cloudinary
       for (const oldImage of property.images) {

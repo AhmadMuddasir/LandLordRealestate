@@ -8,11 +8,22 @@ cloudinary.config({
      api_secret:config.cloudinaryApiSecret,
 })
 
-const uploadAndCompressImage = async (filePath) => {
+const uploadAndCompressImage = async (
+  filePath,
+  folder = "realestate/properties"
+) => {
   const result = await cloudinary.uploader.upload(filePath, {
-    folder: "realestate/properties",
-    quality: "auto",
-    fetch_format: "auto",
+    folder,
+
+    // CHANGE: Limit very large camera images
+    transformation: [
+      {
+        width: 2000,
+        height: 2000,
+        crop: "limit",
+        quality: "auto",
+      },
+    ],
   });
 
   return {

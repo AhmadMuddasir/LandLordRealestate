@@ -1,11 +1,16 @@
 import { apiClient } from "./client";
 
 export const propertyApi = {
-  getAll: async () => {
-    const { data } = await apiClient.get("/properties");
+getAll: async (params = {}) => {
+  const { data } = await apiClient.get(
+    "/properties",
+    {
+      params,
+    }
+  );
 
-    return data;
-  },
+  return data;
+},
 
   getById: async (id) => {
     const { data } = await apiClient.get(`/properties/${id}`);
