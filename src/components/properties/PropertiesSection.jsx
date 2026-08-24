@@ -5,7 +5,12 @@ import Link from "next/link";
 import { propertyApi } from "@/lib/api/property";
 import PropertyCard from "./PropertyCard";
 import toast from "react-hot-toast";
-import { Loader2, Search, Building2, ArrowRight } from "lucide-react";
+import {
+  Loader2,
+  Search,
+  Building2,
+  ArrowRight,
+} from "lucide-react";
 
 const PropertiesSection = ({
   limit = null,
@@ -18,7 +23,7 @@ const PropertiesSection = ({
 
   useEffect(() => {
     loadProperties();
-  }, []);
+  }, [limit]);
 
   const loadProperties = async () => {
     try {
@@ -27,19 +32,28 @@ const PropertiesSection = ({
       const data = await propertyApi.getAll({
         limit: limit || 24,
       });
-      const list = Array.isArray(data) ? data : (data?.properties ?? []);
+
+      const list = Array.isArray(data)
+        ? data
+        : data?.properties ?? [];
 
       setProperties(list);
     } catch (error) {
       console.error("Failed to load properties:", error);
-      toast.error(error.response?.data?.message || "Failed to load properties");
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to load properties"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const filteredProperties = properties.filter((property) =>
-    property.location?.toLowerCase().includes(search.toLowerCase()),
+    property.location
+      ?.toLowerCase()
+      .includes(search.toLowerCase())
   );
 
   const displayedProperties = limit
@@ -62,7 +76,8 @@ const PropertiesSection = ({
               </h1>
 
               <p className="mt-2 max-w-xl text-sm text-gray-500 sm:text-base">
-                Explore properties available for sale in different locations.
+                Explore properties available for sale in
+                different locations.
               </p>
             </div>
 
@@ -71,7 +86,8 @@ const PropertiesSection = ({
                 href="/properties"
                 className="flex shrink-0 items-center gap-1 text-sm font-semibold text-cyan-600 transition hover:text-cyan-700"
               >
-                View all <ArrowRight size={16} />
+                View all
+                <ArrowRight size={16} />
               </Link>
             )}
           </div>
@@ -88,7 +104,9 @@ const PropertiesSection = ({
                 type="text"
                 placeholder="Search by location..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
                 className="w-full rounded-xl border border-gray-200 bg-white py-3.5 pl-11 pr-4 text-sm text-black outline-none transition placeholder:text-gray-400 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-100"
               />
             </div>
@@ -100,10 +118,12 @@ const PropertiesSection = ({
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Result count */}
         {!loading && showSearch && (
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-6">
             <p className="text-sm text-gray-500">
               {filteredProperties.length}{" "}
-              {filteredProperties.length === 1 ? "property" : "properties"}{" "}
+              {filteredProperties.length === 1
+                ? "property"
+                : "properties"}{" "}
               found
             </p>
           </div>
@@ -113,8 +133,14 @@ const PropertiesSection = ({
         {loading ? (
           <div className="flex min-h-[300px] items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-gray-500">
-              <Loader2 size={32} className="animate-spin text-cyan-500" />
-              <p className="text-sm">Loading properties...</p>
+              <Loader2
+                size={32}
+                className="animate-spin text-cyan-500"
+              />
+
+              <p className="text-sm">
+                Loading properties...
+              </p>
             </div>
           </div>
         ) : displayedProperties.length === 0 ? (

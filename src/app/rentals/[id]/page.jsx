@@ -6,6 +6,7 @@ import { rentalApi } from "@/lib/api/rental";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Pencil,Trash2 } from "lucide-react";
 
 const page = () => {
   const [rentals, setRentals] = useState([]);
@@ -201,22 +202,31 @@ const page = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-  
+<div className="mt-8 flex flex-col gap-3 sm:flex-row">
+  {/* Edit - only owner */}
+  {user &&
+    rentals.creator_id &&
+    String(rentals.creator_id) === String(user.id) && (
+      <>
+        <button
+          onClick={() => router.push(`/rentals/${params.id}/edit`)}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-cyan-500 px-5 py-3.5 font-semibold text-white transition hover:bg-cyan-600"
+        >
+          <Pencil size={17} />
+          Edit Rentals
+        </button>
 
-                  {/* Delete - only owner */}
-                  {user &&
-                    rentals.creator_id &&
-                    String(rentals.creator_id) === String(user.id) && (
-                      <button
-                        onClick={deleteRental}
-                        disabled={deleting}
-                        className="flex flex-1 items-center justify-center rounded-xl border border-red-200 px-5 py-3.5 font-semibold text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        {deleting ? "Deleting..." : "Delete Rental"}
-                      </button>
-                    )}
-                </div>
+        <button
+          onClick={deleteRental}
+          disabled={deleting}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-200 px-5 py-3.5 font-semibold text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Trash2 size={17} />
+          {deleting ? "Deleting..." : "Delete Property"}
+        </button>
+      </>
+    )}
+</div>
               </div>
             </div>
           </section>

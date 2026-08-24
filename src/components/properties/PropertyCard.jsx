@@ -7,6 +7,7 @@ import {
   Ruler,
   ArrowRight,
   Tag,
+  CalendarDays, 
 } from "lucide-react";
 import { getOptimizedCloudinaryUrl } from "@/lib/utils/cloudinary";
 
@@ -84,8 +85,22 @@ const image = getOptimizedCloudinaryUrl(
           <span>
             Area {property.areaSize}
           </span>
-
         </div>
+          {/* Upload Date */}
+        {property.createdAt && (
+          <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+            <CalendarDays size={17} className="text-gray-400" />
+
+            <span>
+              Uploaded{" "}
+              {new Date(property.createdAt).toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </span>
+          </div>
+        )}
 
 
         {/* Footer */}

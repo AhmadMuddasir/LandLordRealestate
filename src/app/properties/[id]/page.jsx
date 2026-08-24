@@ -6,11 +6,13 @@ import { propertyApi } from "@/lib/api/property";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import {Pencil,Trash2} from "lucide-react"
 
 const page = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const params = useParams();
   const router = useRouter();
@@ -50,6 +52,8 @@ const page = () => {
       setDeleting(false);
     }
   };
+
+
   const image =
     properties.images?.[0]?.url ||
     properties.images?.[0] ||
@@ -174,35 +178,42 @@ const page = () => {
 
                 {/* Owner */}
                 <div className="mt-8 rounded-xl border border-gray-200 p-5">
-
                   <div className="mt-4">
                     <p className="font-semibold text-black">
                       Property Owner : {properties.ownerName}
                     </p>
                     <p className="mt-3 text-xl font-bold ">
-                      Whatsapp: {properties.contactNumber} 
-                    
+                      Whatsapp: {properties.contactNumber}
                     </p>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+<div className="mt-8 flex flex-col gap-3 sm:flex-row">
+  {/* Edit - only owner */}
+  {user &&
+    properties.creator_id &&
+    String(properties.creator_id) === String(user.id) && (
+      <>
+        <button
+          onClick={() => router.push(`/properties/${params.id}/edit`)}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-cyan-500 px-5 py-3.5 font-semibold text-white transition hover:bg-cyan-600"
+        >
+          <Pencil size={17} />
+          Edit Property
+        </button>
 
-
-                  {/* Delete - only owner */}
-                  {user &&
-                    properties.creator_id &&
-                    String(properties.creator_id) === String(user.id) && (
-                      <button
-                        onClick={deleteProperty}
-                        disabled={deleting}
-                        className="flex flex-1 items-center justify-center rounded-xl border border-red-200 px-5 py-3.5 font-semibold text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
-                      >
-                        {deleting ? "Deleting..." : "Delete Property"}
-                      </button>
-                    )}
-                </div>
+        <button
+          onClick={deleteProperty}
+          disabled={deleting}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-red-200 px-5 py-3.5 font-semibold text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Trash2 size={17} />
+          {deleting ? "Deleting..." : "Delete Property"}
+        </button>
+      </>
+    )}
+</div>
               </div>
             </div>
           </section>
