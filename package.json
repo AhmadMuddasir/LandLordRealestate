@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev:next": "next dev",
+    "build": "next build",
     "dev:api": "nodemon src/api/server.js",
     "dev": "concurrently \"npm run dev:next\" \"npm run dev:api\"",
     "lint": "eslint"
@@ -38,3 +39,6 @@
   },
   "packageManager": "pnpm@10.6.5"
 }
+
+
+
