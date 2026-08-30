@@ -82,5 +82,6 @@ propertySchema.index({
   location: 1,
 });
 
+
 export default mongoose.models.Property ||
   mongoose.model("Property", propertySchema);

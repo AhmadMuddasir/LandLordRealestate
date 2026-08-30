@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import dns from "dns";
 import { config } from "./config.js";
 
-// Override DNS to fix SRV lookup failures
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const connectDB = async () => {

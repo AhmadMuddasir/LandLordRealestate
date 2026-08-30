@@ -61,7 +61,6 @@ const ImageCarousel = ({ images = [], alt = "Property" }) => {
         ))}
       </div>
 
-      {/* Left / Right arrows (desktop) */}
       {urls.length > 1 && (
         <>
           <button
@@ -81,7 +80,6 @@ const ImageCarousel = ({ images = [], alt = "Property" }) => {
         </>
       )}
 
-      {/* Dot indicators */}
       {urls.length > 1 && (
         <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
           {urls.map((_, idx) => (

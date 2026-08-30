@@ -13,7 +13,6 @@ export function AuthProvider({ children }) {
 
   const router = useRouter();
 
-  // Restore login session
   useEffect(() => {
     try {
       const token = localStorage.getItem("token");
@@ -31,7 +30,7 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Login
+  
   const login = async (email, password) => {
     try {
       const data = await authApi.login(email, password);
@@ -51,7 +50,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Register
   const register = async (name, email, password) => {
     try {
       const data = await authApi.register(name, email, password);
@@ -70,7 +68,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Logout
   const logout = () => {
     authApi.logout();
     setUser(null);

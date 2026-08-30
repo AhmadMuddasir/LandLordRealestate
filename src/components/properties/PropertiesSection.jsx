@@ -62,7 +62,6 @@ const PropertiesSection = ({
 
   return (
     <>
-      {/* Header */}
       <section className="border-b border-gray-100 bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
@@ -92,7 +91,6 @@ const PropertiesSection = ({
             )}
           </div>
 
-          {/* Search */}
           {showSearch && (
             <div className="relative max-w-xl">
               <Search
@@ -114,9 +112,7 @@ const PropertiesSection = ({
         </div>
       </section>
 
-      {/* Properties */}
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Result count */}
         {!loading && showSearch && (
           <div className="mb-6">
             <p className="text-sm text-gray-500">
@@ -129,7 +125,6 @@ const PropertiesSection = ({
           </div>
         )}
 
-        {/* Loading */}
         {loading ? (
           <div className="flex min-h-[300px] items-center justify-center">
             <div className="flex flex-col items-center gap-3 text-gray-500">
@@ -144,7 +139,6 @@ const PropertiesSection = ({
             </div>
           </div>
         ) : displayedProperties.length === 0 ? (
-          /* Empty state */
           <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-5 text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-cyan-50 text-cyan-500">
               <Building2 size={26} />
@@ -159,7 +153,6 @@ const PropertiesSection = ({
             </p>
           </div>
         ) : (
-          /* Property grid */
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {displayedProperties.map((property) => (
               <PropertyCard

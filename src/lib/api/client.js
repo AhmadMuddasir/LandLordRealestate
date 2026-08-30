@@ -21,7 +21,6 @@ apiClient.interceptors.request.use(
       }
     }
 
-    // Let axios set the correct multipart boundary itself
     if (config.data instanceof FormData) {
       delete config.headers["Content-Type"];
     }

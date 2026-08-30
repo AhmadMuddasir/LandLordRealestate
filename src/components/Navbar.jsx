@@ -19,7 +19,6 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2"
@@ -29,12 +28,9 @@ const Navbar = () => {
              <Building2/>
           </div>
 
-          {/* <span className="text-xl font-bold tracking-tight text-black">
-            Real<span className="text-cyan-500">Estate</span>
-          </span> */}
+
         </Link>
 
-        {/* Desktop Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           <Link
             href="/"
@@ -65,9 +61,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Right Side */}
         <div className="hidden items-center gap-3 md:flex">
-          {/* Search */}
           <Link
             href="/search"
             className="flex h-10 w-10 items-center justify-center rounded-full text-gray-700 transition hover:bg-cyan-50 hover:text-cyan-500"
@@ -79,9 +73,7 @@ const Navbar = () => {
           {!isLoading && (
             <>
               {user ? (
-                /* Logged In */
                 <div className="flex items-center gap-2">
-                  {/* User Profile */}
                   <Link
                     href="/profile"
                     className="flex items-center gap-2 rounded-lg px-3 py-2 transition hover:bg-cyan-50"
@@ -95,7 +87,6 @@ const Navbar = () => {
                     </span>
                   </Link>
 
-                  {/* Logout */}
                   <button
                     type="button"
                     onClick={handleLogout}
@@ -106,7 +97,6 @@ const Navbar = () => {
                   </button>
                 </div>
               ) : (
-                /* Logged Out */
                 <>
                   <Link
                     href="/login"
@@ -118,7 +108,6 @@ const Navbar = () => {
                 </>
               )}
 
-              {/* Add Listing */}
               <Link
                 href="/add-listings"
                 className="flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-cyan-600"
@@ -130,9 +119,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Right Side */}
         <div className="flex items-center gap-2 md:hidden">
-          {/* Search OUTSIDE menu */}
           <Link
             href="/search"
             className="flex h-10 w-10 items-center justify-center rounded-full text-gray-700 transition hover:bg-cyan-50 hover:text-cyan-500"
@@ -141,7 +128,6 @@ const Navbar = () => {
             <Search size={20} />
           </Link>
 
-          {/* Menu */}
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -154,11 +140,9 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Navigation */}
       {menuOpen && (
         <div className="border-t border-gray-200 bg-white md:hidden">
           <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
-            {/* Navigation Links */}
             <div className="flex flex-col">
               <Link
                 href="/"
@@ -193,12 +177,10 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Mobile Account */}
             {!isLoading && (
               <div className="mt-3 border-t border-gray-100 pt-4">
                 {user ? (
                   <>
-                    {/* Profile */}
                     <Link
                       href="/profile"
                       onClick={() => setMenuOpen(false)}
@@ -217,7 +199,6 @@ const Navbar = () => {
                       </div>
                     </Link>
 
-                    {/* Logout */}
                     <button
                       type="button"
                       onClick={handleLogout}
@@ -229,7 +210,6 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    {/* Login */}
                     <Link
                       href="/login"
                       onClick={() => setMenuOpen(false)}
@@ -243,7 +223,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Add Listing */}
             <Link
               href="/add-listings"
               onClick={() => setMenuOpen(false)}

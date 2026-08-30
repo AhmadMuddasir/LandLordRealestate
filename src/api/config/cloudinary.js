@@ -15,7 +15,6 @@ const uploadAndCompressImage = async (
   const result = await cloudinary.uploader.upload(filePath, {
     folder,
 
-    // CHANGE: Limit very large camera images
     transformation: [
       {
         width: 2000,
